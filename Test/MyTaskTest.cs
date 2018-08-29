@@ -544,5 +544,17 @@ namespace Test
             
             Assert.That(modernPsms.SequenceEqual(classicPsms));
         }
+
+        [Test] 
+        public static void FileSpecificParametersTest()
+        {
+            var fileSpecificParams = new FileSpecificParameters();
+            f  ileSpecificParams.ValidateFileSpecificVariableNames();
+            var toml = Toml.ReadFile(Path.Combine(TestContext.CurrentContext.TestDirectory, @"TestPSMOutput\SearchTaskconfig.toml"), MetaMorpheusTask.tomlConfig);
+            Assert.That(() => new FileSpecificParameters(toml), Throws.TypeOf<MetaMorpheusException>());
+            SearchTask searchTask = new SearchTask();
+            Toml.WriteFile(searchTask, "SearchTask.toml", MetaMorpheusTask.tomlConfig);
+            FileSpecificParameters.ValidateFileSpecificVariableNames();
+        }
     }
 }
